@@ -1,0 +1,127 @@
+{
+    "database": {
+        "name": "inventory_billing_rma",
+        "tables": [
+            {
+                "name": "countries",
+                "purpose": "Stores country information",
+                "key_fields": [
+                    "id",
+                    "name"
+                ],
+                "relationships": [
+                    "companies(country_id)",
+                    "company_branches(country_id)",
+                    "suppliers(country_id)"
+                ]
+            },
+            {
+                "name": "currencies",
+                "purpose": "Stores currency information",
+                "key_fields": [
+                    "id",
+                    "code",
+                    "name",
+                    "symbol"
+                ],
+                "relationships": [
+                    "companies(currency_id)",
+                    "product_supplier_prices(currency_id)"
+                ]
+            },
+            {
+                "name": "languages",
+                "purpose": "Stores language information",
+                "key_fields": [
+                    "id",
+                    "name",
+                    "code"
+                ],
+                "relationships": [
+                    "companies(language_id)"
+                ]
+            },
+            {
+                "name": "companies",
+                "purpose": "Stores company information",
+                "key_fields": [
+                    "id",
+                    "name",
+                    "country_id",
+                    "currency_id",
+                    "language_id"
+                ],
+                "relationships": [
+                    "company_branches(company_id)",
+                    "roles(company_id)",
+                    "users(company_id)"
+                ]
+            },
+            {
+                "name": "company_branches",
+                "purpose": "Stores branch information for companies",
+                "key_fields": [
+                    "id",
+                    "company_id",
+                    "country_id",
+                    "state",
+                    "city"
+                ],
+                "relationships": [
+                    "users(branch_id)",
+                    "inventory(branch_id)",
+                    "sales(branch_id)"
+                ]
+            },
+            {
+                "name": "roles",
+                "purpose": "Defines user roles",
+                "key_fields": [
+                    "id",
+                    "name",
+                    "company_id"
+                ],
+                "relationships": [
+                    "users(role_id)",
+                    "role_permissions(role_id)"
+                ]
+            },
+            {
+                "name": "permissions",
+                "purpose": "Defines system permissions",
+                "key_fields": [
+                    "id",
+                    "name"
+                ],
+                "relationships": [
+                    "role_permissions(permission_id)"
+                ]
+            },
+            {
+                "name": "role_permissions",
+                "purpose": "Maps permissions to roles",
+                "key_fields": [
+                    "role_id",
+                    "permission_id"
+                ],
+                "relationships": []
+            },
+            {
+                "name": "users",
+                "purpose": "Stores user accounts",
+                "key_fields": [
+                    "id",
+                    "company_id",
+                    "branch_id",
+                    "email",
+                    "role_id"
+                ],
+                "relationships": [
+                    "sales(customer_id)",
+                    "notifications(user_id)"
+                ]
+            }
+        ],
+        "instructions": "This file documents the database schema and relationships. Do not delete or modify these instructions. Follow the workflow as described in Readme.md."
+    }
+}

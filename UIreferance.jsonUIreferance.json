@@ -1,0 +1,75 @@
+{
+    "ui_design_system": {
+        "principles": [
+            "Centralized Component Architecture",
+            "Responsive Design (Mobile-first)",
+            "Professional & Attractive Aesthetic (Meta Business Dashboard inspired)",
+            "Glossy Look & Feel",
+            "Dark/Light Theme Support",
+            "Role-Based UI Visibility"
+        ],
+        "components": [
+            {
+                "name": "Header",
+                "description": "Top navigation bar with logo, title, and theme switcher. Will include user avatar/quick actions later.",
+                "styling_notes": "Professional, clean, with subtle gradients/shadows for a glossy effect."
+            },
+            {
+                "name": "Sidebar",
+                "description": "Left-hand navigation menu with role-based menu items and icons.",
+                "styling_notes": "Dark background, clear active states, smooth transitions."
+            },
+            {
+                "name": "Card",
+                "description": "Modular display units for statistics, summaries, or individual items.",
+                "styling_notes": "Rounded corners, subtle shadows, clean typography, adaptable to theme."
+            },
+            {
+                "name": "Table",
+                "description": "Responsive data tables for displaying lists of information (e.g., users, activity logs).",
+                "styling_notes": "Clean lines, alternating row colors, hover effects, clear headers."
+            },
+            {
+                "name": "Button",
+                "description": "Standardized buttons for various actions, styled per theme and role.",
+                "styling_notes": "Consistent padding, border-radius, hover/active states, subtle gradients."
+            },
+            {
+                "name": "Form",
+                "description": "Standardized input fields, labels, and validation for data entry.",
+                "styling_notes": "Clean, clear, and user-friendly input elements."
+            },
+            {
+                "name": "Modal",
+                "description": "Pop-up dialogs for confirmations, edits, or detailed views.",
+                "styling_notes": "Centered, overlay background, clear close actions."
+            },
+            {
+                "name": "Theme Switcher",
+                "description": "Toggle for switching between light and dark modes.",
+                "styling_notes": "Visually distinct, smooth transition between themes."
+            }
+        ],
+        "icon_strategy": {
+            "library": "Font Awesome 6 (CDN)",
+            "usage": "Used for all menu items, action buttons, and key visual indicators to enhance professionalism and clarity. Icons will be chosen to semantically represent their associated functionality."
+        },
+        "color_palette": {
+            "primary": "#007bff",
+            "secondary": "#6c757d",
+            "background_light": "#f4f7f6",
+            "text_light": "#333",
+            "background_dark": "#2c2c2c",
+            "text_dark": "#f4f7f6",
+            "card_background_light": "#ffffff",
+            "card_background_dark": "#3a3a3a",
+            "accent_blue_dark_mode": "#66b3ff"
+        },
+        "typography": {
+            "font_family": "Arial, sans-serif",
+            "heading_sizes": "Consistent hierarchy (h1, h2, h3)",
+            "body_text_size": "Readable and accessible"
+        }
+    },
+    "instructions": "This file documents the UI design system, components, and styling guidelines. Do not delete or modify these instructions. Follow the workflow as described in Readme.md."
+}

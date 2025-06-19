@@ -1,0 +1,103 @@
+{
+    "instructiones": [
+        {
+            "what you can not do": "you can not delete, modify or update these instructions and readme, , you can not delete and modify completed task or subtask"
+        },
+        {
+            "what you can do": "you can add modify task.json more task, pending task task or subtask, nly update or modify other files"
+        },
+        {
+            "what to follow": "you need to strictly follow current system architecher if you need any further assistance you need to read files(readme, task.json,package.json,dir.json,dbref.json, UIreferance.json,sql schema, auth-flow.md, tools.json) and understand"
+        },
+        {
+            "files": "you need to update task.json, apidocumentation( with complete postman refrance with segment with response when you create any new api), when working on UI you are compusory to follow system arhitecher and modify accordingly and update UIreferance.json, update error.log with filename and tried process with result so you dont become in loop, update dir.json & auth-flow.md, tools.jsonif needed "
+        },
+        {
+            "How to work": "you need to read task.json,relevent file and remember , you need to create current task just above Steps with line number status so you can track, if any thing in middle add in relevent task and sub task with proper structure"
+        },
+        {
+            "also remember ": "you need to make sure you dont disturb any completed or working functionality, delete exixsting or core architecher as per current system in any case,make double sure that this in production app should remains working, update all files as per requirment and instructiones"
+        }
+    ],
+    "steps": [
+        {
+            "id": 1,
+            "name": "Documentation",
+            "status": "completed",
+            "description": "Create and update all documentation files",
+            "tasks": [
+                {
+                    "id": 1.1,
+                    "name": "Update dbref.json",
+                    "status": "completed",
+                    "description": "Document database schema and relationships"
+                },
+                {
+                    "id": 1.2,
+                    "name": "Update dir.json",
+                    "status": "completed",
+                    "description": "Document complete directory structure"
+                },
+                {
+                    "id": 1.3,
+                    "name": "Create tools.json",
+                    "status": "completed",
+                    "description": "Map functionality to implementation files"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Backend Development - Phase 1",
+            "status": "pending",
+            "description": "Implement core backend functionality",
+            "tasks": [
+                {
+                    "id": 2.1,
+                    "name": "Authentication System",
+                    "status": "completed",
+                    "description": "Implement JWT auth with roles and permissions"
+                },
+                {
+                    "id": 2.2,
+                    "name": "User Management",
+                    "status": "completed",
+                    "description": "Implement user CRUD with role assignments"
+                },
+                {
+                    "id": 2.3,
+                    "name": "Product & Inventory",
+                    "status": "completed",
+                    "description": "Implement product and inventory management"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "Backend Development - Phase 2",
+            "status": "pending",
+            "description": "Implement business logic modules",
+            "tasks": [
+                {
+                    "id": 3.1,
+                    "name": "Sales & Invoicing",
+                    "status": "completed",
+                    "description": "Implement sales transactions and invoicing"
+                },
+                {
+                    "id": 3.2,
+                    "name": "RMA System",
+                    "status": "completed",
+                    "description": "Implement return merchandise authorization"
+                },
+                {
+                    "id": 3.3,
+                    "name": "Notifications",
+                    "status": "completed",
+                    "description": "Implement notification system"
+                }
+            ]
+        }
+    ],
+    "instructions": "This file tracks all development tasks and status. Do not delete or modify these instructions. Follow the workflow as described in Readme.md."
+}

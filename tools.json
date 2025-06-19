@@ -1,0 +1,85 @@
+{
+    "functionality": {
+        "authentication": {
+            "controllers": [
+                "authController.js"
+            ],
+            "routes": [
+                "authRoutes.js"
+            ],
+            "middleware": [
+                "authMiddleware.js"
+            ],
+            "description": "Handles user authentication, JWT tokens, and session management"
+        },
+        "user_management": {
+            "controllers": [
+                "userController.js"
+            ],
+            "routes": [
+                "userRoutes.js"
+            ],
+            "models": [
+                "User.js",
+                "Role.js",
+                "Permission.js",
+                "RolePermission.js"
+            ],
+            "description": "Manages user accounts, roles, and permissions"
+        },
+        "inventory": {
+            "controllers": [
+                "inventoryController.js"
+            ],
+            "routes": [
+                "inventoryRoutes.js"
+            ],
+            "models": [
+                "Inventory.js",
+                "Product.js",
+                "ProductSerial.js"
+            ],
+            "description": "Tracks product inventory across branches"
+        },
+        "sales": {
+            "controllers": [
+                "salesController.js"
+            ],
+            "routes": [
+                "salesRoutes.js"
+            ],
+            "models": [
+                "Sale.js",
+                "SaleItem.js",
+                "Invoice.js"
+            ],
+            "description": "Handles sales transactions and invoicing"
+        },
+        "rma": {
+            "controllers": [
+                "rmaController.js"
+            ],
+            "routes": [
+                "rmaRoutes.js"
+            ],
+            "models": [
+                "Return.js",
+                "Replacement.js",
+                "RmaReturn.js"
+            ],
+            "description": "Manages return merchandise authorization process"
+        },
+        "notifications": {
+            "controllers": [],
+            "routes": [],
+            "models": [
+                "Notification.js"
+            ],
+            "utils": [
+                "notifications.js"
+            ],
+            "description": "Handles system notifications (email, SMS, WhatsApp)"
+        }
+    },
+    "instructions": "This file maps functionality to implementation files. Do not delete or modify these instructions. Follow the workflow as described in Readme.md."
+}

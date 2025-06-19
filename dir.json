@@ -1,0 +1,122 @@
+{
+    "structure": {
+        "root": {
+            "files": [
+                ".gitignore",
+                "Apis.txt",
+                "auth-flow.md",
+                "dbref.json",
+                "dir.json",
+                "Dockerfile",
+                "inventory_billing_rma.sql",
+                "package-lock.json",
+                "package.json",
+                "README.md",
+                "server.js",
+                "task.json",
+                "tools.json",
+                "ui-flow.md",
+                "UIreferance.json"
+            ],
+            "directories": {
+                "src": {
+                    "files": [],
+                    "directories": {
+                        "config": {
+                            "files": [
+                                "database.js",
+                                "env.js",
+                                "jwt.js"
+                            ]
+                        },
+                        "controllers": {
+                            "files": [
+                                "authController.js",
+                                "cityController.js",
+                                "countryController.js",
+                                "inventoryController.js",
+                                "paymentController.js",
+                                "productController.js",
+                                "rmaController.js",
+                                "salesController.js",
+                                "stateController.js",
+                                "supplierController.js",
+                                "userController.js"
+                            ]
+                        },
+                        "middleware": {
+                            "files": [
+                                "authMiddleware.js",
+                                "errorHandler.js"
+                            ]
+                        },
+                        "models": {
+                            "files": [
+                                "Branch.js",
+                                "Brand.js",
+                                "BrandCountry.js",
+                                "Category.js",
+                                "City.js",
+                                "Company.js",
+                                "CompanyBranch.js",
+                                "Country.js",
+                                "Currency.js",
+                                "Customer.js",
+                                "Expense.js",
+                                "index.js",
+                                "Inventory.js",
+                                "Invoice.js",
+                                "Language.js",
+                                "LanguageAvailability.js",
+                                "Notification.js",
+                                "Payment.js",
+                                "Permission.js",
+                                "PortalStaff.js",
+                                "PortalUser.js",
+                                "Product.js",
+                                "ProductPricing.js",
+                                "ProductSerial.js",
+                                "ProductSupplierPrice.js",
+                                "Purchase.js",
+                                "Replacement.js",
+                                "Return.js",
+                                "RmaReturn.js",
+                                "Role.js",
+                                "RolePermission.js",
+                                "Sale.js",
+                                "SaleItem.js",
+                                "State.js",
+                                "Subcategory.js",
+                                "Supplier.js",
+                                "Tax.js",
+                                "User.js"
+                            ]
+                        },
+                        "routes": {
+                            "files": [
+                                "authRoutes.js",
+                                "cityRoutes.js",
+                                "countryRoutes.js",
+                                "inventoryRoutes.js",
+                                "paymentRoutes.js",
+                                "productRoutes.js",
+                                "rmaRoutes.js",
+                                "salesRoutes.js",
+                                "stateRoutes.js",
+                                "supplierRoutes.js",
+                                "userRoutes.js"
+                            ]
+                        },
+                        "utils": {
+                            "files": [
+                                "helpers.js",
+                                "notifications.js"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "instructions": "This file documents the complete file and directory structure. Do not delete or modify these instructions. Follow the workflow as described in Readme.md."
+}

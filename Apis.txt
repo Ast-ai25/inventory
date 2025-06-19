@@ -1,0 +1,145 @@
+ Key API Endpoints (For the App, Full Coverage)
+ 
+ instructions you can not delete nor remove any API from below list you can only update or add APIs its system core 
+
+    POST /api/auth/register (with device info)
+
+    POST /api/auth/login (returns JWT)
+
+    POST /api/auth/logout (revokes session)
+
+    POST /api/auth/refresh (optional: JWT refresh)
+
+    POST /api/device/register
+
+    POST /api/device/heartbeat
+
+    POST /api/device/update
+
+    POST /api/device/unregister
+
+User/Profile
+
+    GET /api/user/profile
+
+    PUT /api/user/profile
+
+    POST /api/user/avatar
+
+    POST /api/user/voice-intro
+
+    GET /api/user/status
+
+    GET /api/user/respect-score
+
+Professional/Business
+
+    POST /api/business/create
+
+    PUT /api/business/update
+
+    GET /api/business/list
+
+    POST /api/business/team/add
+
+    POST /api/business/team/remove
+
+Matchmaking/Relationships
+
+    GET /api/match/discover
+
+    POST /api/match/like
+
+    POST /api/match/skip
+
+    GET /api/match/list
+
+    POST /api/relationship/block
+
+    POST /api/relationship/mute
+
+    POST /api/relationship/favorite
+
+    GET /api/relationship/list
+
+Tokens & Economy
+
+    GET /api/token/balance
+
+    POST /api/token/transfer
+
+    GET /api/token/transactions
+
+    POST /api/token/spend
+
+    POST /api/token/earn
+
+Chat & Messaging
+
+    GET /api/chat/list
+
+    POST /api/chat/start
+
+    POST /api/chat/send
+
+    GET /api/chat/messages
+
+    POST /api/chat/boost
+
+    POST /api/chat/gift
+
+Content/Media/Hashtag/SEO
+
+    POST /api/content/create
+
+    POST /api/content/media/upload
+
+    GET /api/content/list
+
+    GET /api/content/hashtag/:tag
+
+    GET /api/content/seo/:slug
+
+    GET /api/content/trending
+
+Likes
+
+    POST /api/like
+
+    DELETE /api/like
+
+    GET /api/like/list
+
+Event/Room
+
+    GET /api/event/list
+
+    POST /api/event/join
+
+    POST /api/event/create
+
+    GET /api/room/list
+
+    POST /api/room/join
+
+Notification
+
+    GET /api/notification/list
+
+    POST /api/notification/ack
+
+    PUT /api/notification/preferences
+
+Reporting/Moderation
+
+    POST /api/report
+
+    GET /api/moderation/list
+
+    POST /api/moderation/action (admin)
+
+Analytics
+
+    POST /api/analytics/app-usage
+
+    GET /api/analytics/stats
