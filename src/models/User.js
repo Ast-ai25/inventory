@@ -12,4 +12,12 @@ const User = sequelize.define('User', {
     is_active: { type: DataTypes.BOOLEAN, defaultValue: true }
 });
 
+// Add association to Role model
+User.associate = function (models) {
+    User.belongsTo(models.Role, {
+        foreignKey: 'role_id',
+        as: 'Role'
+    });
+};
+
 module.exports = User;

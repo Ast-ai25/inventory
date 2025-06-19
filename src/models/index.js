@@ -1,11 +1,9 @@
 const sequelize = require('../config/database');
 
-// const User = require('./User');
-
-// const Permission = require('./Permission');
-
-// const Company = require('./Company');
-// const CompanyBranch = require('./CompanyBranch');
+const User = require('./User');
+const Permission = require('./Permission');
+const Company = require('./Company');
+const CompanyBranch = require('./CompanyBranch');
 const Country = require('./Country');
 const State = require('./State');
 const City = require('./City');
@@ -38,12 +36,12 @@ const Payment = require('./Payment');
 const Return = require('./Return');
 const Replacement = require('./Replacement');
 
-// Sync all models with database
-sequelize.sync({ alter: true })
-    .then(() => console.log("✅ All models synced with database."))
-    .catch(err => console.error("❌ Model sync failed:", err));
-
-module.exports = {
+// Set up model associations
+const models = {
+    User,
+    Permission,
+    Company,
+    CompanyBranch,
     Country,
     State,
     City,
@@ -75,3 +73,17 @@ module.exports = {
     Return,
     Replacement
 };
+
+// Initialize associations
+Object.values(models).forEach(model => {
+    if (model.associate) {
+        model.associate(models);
+    }
+});
+
+// Sync all models with database
+sequelize.sync({ alter: true })
+    .then(() => console.log("✅ All models synced with database."))
+    .catch(err => console.error("❌ Model sync failed:", err));
+
+module.exports = models;
