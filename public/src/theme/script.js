@@ -1,6 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('loginForm');
-    const errorMessage = document.getElementById('errorMessage');
+    // Only run login code on login page
+    if (window.location.pathname.includes('/index.html')) {
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+
+        return;
+    }
 
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -23,8 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(data.message || 'Login failed');
             }
 
-            // Store token and redirect
-            localStorage.setItem('token', data.token);
+            // Store token with Bearer prefix, permissions and redirect
+            localStorage.setItem('token', `Bearer ${data.token}`);
+            localStorage.setItem('permissions', JSON.stringify(data.user.permissions || []));
             window.location.href = '/dashboard.html';
         } catch (error) {
             errorMessage.textContent = error.message;

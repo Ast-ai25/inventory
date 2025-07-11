@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>InventoryCo - Invoices</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+  <link href="/src/theme/style.css" rel="stylesheet"/>
+</head>
+<body>
+  <div id="app">
+    <div id="page-content">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">Invoice Management</h2>
+            <button id="add-invoice-btn" class="btn btn-primary">
+              <i class="fas fa-file-invoice-dollar me-2"></i> Add Invoice
+            </button>
+          </div>
+          <div id="invoices-table"></div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+    <script src="/src/utils/auth.js"></script>
+  <script src="/src/components/Sidebar/sidebar.js"></script>
+  <script src="/src/components/Header/header.js"></script>
+  <script src="/src/components/Footer/footer.js"></script>
+  <script src="/src/components/Table/TableComponent.js"></script>
+  <script src="/src/components/Modal/ModalComponent.js"></script>
+  <script src="/src/main.js"></script>
+  <script>
+    document.addEventListener('app:layout-ready', async () => {
+      if (!await Auth.checkAuth()) return;
+      let table, modal, items = [];
+      const columns = [
+        { header: 'Invoice #', accessor: 'invoice_number' },
+        { header: 'Company ID', accessor: 'company_id' },
+        { header: 'Date', accessor: 'date' },
+        { header: 'Total Amount', accessor: 'total_amount' }
+      ];
+
+      const userPermissions = {
+          canCreate: Auth.hasPermission('create_invoice'),
+          canUpdate: Auth.hasPermission('update_invoice'),
+          canDelete: Auth.hasPermission('delete_invoice')
+      };
+
+      if (!userPermissions.canCreate) {
+          const addInvoiceBtn = document.getElementById('add-invoice-btn');
+          if (addInvoiceBtn) addInvoiceBtn.style.display = 'none';
+      }
+      const fetchAll = async () => {
+        try {
+          const token = localStorage.getItem('token');
+          const res = await fetch('/api/invoices', { headers: { 'Authorization': token } });
+          if (!res.ok) throw new Error('Fetch failed');
+          items = await res.json();
+          if (table) {
+              table.updateData(items);
+          } else {
+              const handleEditFn = userPermissions.canUpdate ? onEdit : null;
+              const handleDeleteFn = userPermissions.canDelete ? onDelete : null;
+              table = new TableComponent('invoices-table', columns, items, handleEditFn, handleDeleteFn);
+          }
+        } catch(e) { console.error('Load invoices failed:', e); }
+      };
+      const onSave = async (id,data) => {
+        try {
+          const token = localStorage.getItem('token');
+          const method = id ? 'PUT' : 'POST';
+          const url = id ? `/api/invoices/${id}` : '/api/invoices';
+          const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type':'application/json', 'Authorization': token },
+            body: JSON.stringify(data)
+          });
+          if (!res.ok) throw new Error('Save failed');
+          modal.hide(); await fetchAll();
+        } catch(e) { console.error('Save invoice failed:', e); }
+      };
+      const onEdit = id => {
+        const item = items.find(i => i.id == id);
+        item && modal.show(item);
+      };
+      const onDelete = async id => {
+        if (!confirm('Delete this invoice?')) return;
+        try {
+          const token = localStorage.getItem('token');
+          const res = await fetch(`/api/invoices/${id}`, { method:'DELETE', headers:{ 'Authorization': token } });
+          if (!res.ok) throw new Error('Delete failed');
+          await fetchAll();
+        } catch(e) { console.error('Delete failed:', e); }
+      };
+      await fetchAll();
+      modal = new ModalComponent('invoice-modal','Invoice', [
+        { id:'invoice_number', label:'Invoice Number', type:'text' },
+        { id:'company_id',      label:'Company ID',     type:'text' },
+        { id:'date',            label:'Date',           type:'text' },
+        { id:'total_amount',    label:'Total Amount',   type:'text' }
+      ], onSave);
+      document.getElementById('add-invoice-btn').addEventListener('click', () => modal.show());
+    });
+  </script>
+</body>
+</html>

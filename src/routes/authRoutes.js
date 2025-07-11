@@ -9,5 +9,6 @@ router.post('/login', authController.login);
 
 // Protected routes (require valid JWT)
 router.post('/logout', authMiddleware.verifyToken, authController.logout);
+router.get('/verify', authMiddleware.verifyToken, authController.verify);
 
 module.exports = router;

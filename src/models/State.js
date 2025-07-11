@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const { sequelize } = require('../config/database');
 const Country = require('./Country'); // Import Country model
 const State = sequelize.define('State', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },

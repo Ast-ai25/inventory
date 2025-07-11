@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management - Assign Languages</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="/src/theme/style.css" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <div id="page-content">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="mb-0">Assign Languages</h2>
+                        <button id="add-language-btn" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i> Assign Language
+                        </button>
+                    </div>
+                    <div id="language-availabilities-table">
+                        <!-- TableComponent will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+    <script src="/src/utils/auth.js"></script>
+    <script src="/src/components/Sidebar/sidebar.js"></script>
+    <script src="/src/components/Header/header.js"></script>
+    <script src="/src/components/Footer/footer.js"></script>
+    <script src="/src/components/Table/TableComponent.js"></script>
+    <script src="/src/components/Modal/ModalComponent.js"></script>
+    <script src="/src/main.js"></script>
+    <script>
+        document.addEventListener('app:layout-ready', () => {
+            let table;
+            let modal;
+            let languages = [];
+            let countries = [];
+            let states = [];
+
+            const fetchLanguages = async () => {
+                try {
+                    const response = await fetch('/api/languages', {
+                        headers: {
+                            'Authorization': localStorage.getItem('token')
+                        }
+                    });
+                    if (!response.ok) throw new Error('Failed to fetch languages');
+                    languages = await response.json();
+                } catch (error) {
+                    console.error('Failed to load languages:', error);
+                    throw error;
+                }
+            };
+
+            const fetchCountries = async () => {
+                try {
+                    const response = await fetch('/api/countries', {
+                        headers: {
+                            'Authorization': localStorage.getItem('token')
+                        }
+                    });
+                    if (!response.ok) throw new Error('Failed to fetch countries');
+                    countries = await response.json();
+                } catch (error) {
+                    console.error('Failed to load countries:', error);
+                    throw error;
+                }
+            };
+
+            const fetchStates = async () => {
+                try {
+                    const response = await fetch('/api/states', {
+                        headers: {
+                            'Authorization': localStorage.getItem('token')
+                        }
+                    });
+                    if (!response.ok) throw new Error('Failed to fetch states');
+                    states = await response.json();
+                } catch (error) {
+                    console.error('Failed to load states:', error);
+                    throw error;
+                }
+            };
+
+            const fetchLanguageAvailabilities = async () => {
+                try {
+                    const response = await fetch('/api/language-availabilities', {
+                        headers: {
+                            'Authorization': localStorage.getItem('token')
+                        }
+                    });
+                    if (!response.ok) throw new Error('Failed to fetch language assignments');
+                    const data = await response.json();
+                    if (!Array.isArray(data)) throw new Error('Invalid data format');
+                    
+                    const columns = [
+                        { header: 'Language', accessor: 'Language.name' },
+                        { header: 'Country', accessor: 'Country.name' },
+                        { header: 'State', accessor: 'State.name' }
+                    ];
+
+                    if (table) {
+                        table.updateData(data);
+                    } else {
+                        table = new TableComponent(
+                            'language-availabilities-table', 
+                            columns, 
+                            data, 
+                            handleEdit, 
+                            handleDelete
+                        );
+                    }
+                } catch (error) {
+                    console.error('Failed to load language assignments:', error);
+                }
+            };
+
+                    const handleSave = async (id, data) => {
+                        const url = id ? `/api/language-availabilities/${id}` : '/api/language-availabilities';
+                        const method = id ? 'PUT' : 'POST';
+
+                        try {
+                            await fetch(url, {
+                                method,
+                                headers: { 
+                                    'Content-Type': 'application/json',
+                                    'Authorization': localStorage.getItem('token')
+                                },
+                                body: JSON.stringify({ 
+                                    language_id: data.language_id,
+                                    country_id: data.country_id,
+                                    state_id: data.state_id
+                                })
+                            });
+                            modal.hide();
+                            fetchLanguageAvailabilities();
+                        } catch (error) {
+                            console.error('Failed to save language assignment:', error);
+                        }
+                    };
+
+            const handleEdit = (id) => {
+                const assignment = languages.find(l => l.id == id);
+                if (assignment) {
+                    modal.show({ 
+                        id: assignment.id,
+                        language_id: assignment.language_id,
+                        country_id: assignment.country_id,
+                        state_id: assignment.state_id
+                    });
+                }
+            };
+
+            const handleDelete = async (id) => {
+                if (confirm('Are you sure you want to delete this language assignment?')) {
+                    try {
+                        await fetch(`/api/language-availabilities/${id}`, { method: 'DELETE' });
+                        fetchLanguageAvailabilities();
+                    } catch (error) {
+                        console.error('Failed to delete language assignment:', error);
+                    }
+                }
+            };
+
+            if (Auth.getCurrentUser()) {
+                Promise.all([
+                    fetchLanguages(),
+                    fetchCountries(),
+                    fetchStates()
+                ]).then(() => {
+                    fetchLanguageAvailabilities();
+                    
+                    modal = new ModalComponent('language-modal', 'Assign Language', [
+                        { 
+                            id: 'language_id', 
+                            label: 'Language', 
+                            type: 'select',
+                            options: languages.map(l => ({ value: l.id, text: l.name })),
+                            liveSearch: true,
+                            searchPlaceholder: 'Search languages...',
+                            onChange: (value) => {
+                                // Additional logic if needed when language changes
+                            }
+                        },
+                        { 
+                            id: 'country_id', 
+                            label: 'Country', 
+                            type: 'select',
+                            options: countries.map(c => ({ value: c.id, text: c.name })),
+                            liveSearch: true,
+                            searchPlaceholder: 'Search countries...',
+                            onChange: async (value) => {
+                                const response = await fetch(`/api/states/country/${value}`, {
+                                    headers: {
+                                        'Authorization': localStorage.getItem('token')
+                                    }
+                                });
+                                if (response.ok) {
+                                    const statesForCountry = await response.json();
+                                    modal.updateField('state_id', {
+                                        options: statesForCountry.map(s => ({ value: s.id, text: s.name })),
+                                        value: ''
+                                    });
+                                }
+                            }
+                        },
+                        { 
+                            id: 'state_id', 
+                            label: 'State', 
+                            type: 'select',
+                            options: states.map(s => ({ value: s.id, text: s.name })),
+                            liveSearch: true,
+                            searchPlaceholder: 'Search states...'
+                        }
+                    ], handleSave);
+
+                    document.getElementById('add-language-btn').addEventListener('click', () => {
+                        modal.show();
+                    });
+                }).catch(error => {
+                    console.error('Failed to initialize modal:', error);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

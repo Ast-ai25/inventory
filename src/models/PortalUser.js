@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const { sequelize } = require('../config/database');
 const City = require('./City'); // Import Country model
 const PortalUser = sequelize.define('PortalUser', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },

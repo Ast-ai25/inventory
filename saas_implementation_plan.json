@@ -1,0 +1,139 @@
+{
+    "saas_implementation_plan": {
+        "phase": "Planning",
+        "last_updated": "2025-07-10T17:14:24+05:30",
+        "tasks": [
+            {
+                "id": 1,
+                "name": "Database Schema Updates",
+                "status": "pending",
+                "subtasks": [
+                    {
+                        "id": 1.1,
+                        "name": "Add tenant isolation fields",
+                        "status": "pending",
+                        "description": "Add tenant_id to all business tables, subscription fields to User model"
+                    },
+                    {
+                        "id": 1.2,
+                        "name": "Create localization tables",
+                        "status": "pending",
+                        "description": "Country/language/currency preferences for tenants"
+                    },
+                    {
+                        "id": 1.3,
+                        "name": "Enhance Package model",
+                        "status": "pending",
+                        "description": "Add max_users, storage_limit, billing_cycle fields"
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "name": "API Development",
+                "status": "pending",
+                "subtasks": [
+                    {
+                        "id": 2.1,
+                        "name": "Create SaaS controllers",
+                        "status": "pending",
+                        "description": "Separate controllers for tenant management, subscriptions, etc."
+                    },
+                    {
+                        "id": 2.2,
+                        "name": "Implement mobile APIs",
+                        "status": "pending",
+                        "description": "Separate API routes for mobile/device access with simplified payloads"
+                    },
+                    {
+                        "id": 2.3,
+                        "name": "Create tenant middleware",
+                        "status": "pending",
+                        "description": "Row-level security and tenant isolation"
+                    }
+                ]
+            },
+            {
+                "id": 3,
+                "name": "UI Updates",
+                "status": "pending",
+                "subtasks": [
+                    {
+                        "id": 3.1,
+                        "name": "Create SaaS admin portal",
+                        "status": "pending",
+                        "description": "Tenant management interface"
+                    },
+                    {
+                        "id": 3.2,
+                        "name": "Build subscription dashboard",
+                        "status": "pending",
+                        "description": "Package selection, billing, usage tracking"
+                    }
+                ]
+            },
+            {
+                "id": 4,
+                "name": "Permission System",
+                "status": "pending",
+                "subtasks": [
+                    {
+                        "id": 4.1,
+                        "name": "Implement hierarchical permissions",
+                        "status": "pending",
+                        "description": "Tenant Admin → Company Admin → Department → User"
+                    },
+                    {
+                        "id": 4.2,
+                        "name": "Package enforcement",
+                        "status": "pending",
+                        "description": "Module access based on subscription package"
+                    }
+                ]
+            },
+            {
+                "id": 5,
+                "name": "Testing",
+                "status": "pending",
+                "subtasks": [
+                    {
+                        "id": 5.1,
+                        "name": "Backend unit tests",
+                        "status": "pending"
+                    },
+                    {
+                        "id": 5.2,
+                        "name": "Multi-tenant integration testing",
+                        "status": "pending"
+                    }
+                ]
+            }
+        ],
+        "milestones": [
+            {
+                "name": "Phase 1 - Core Implementation",
+                "target_date": "2025-07-17",
+                "tasks": [
+                    1,
+                    2.1,
+                    2.3
+                ]
+            },
+            {
+                "name": "Phase 2 - UI & Mobile APIs",
+                "target_date": "2025-07-24",
+                "tasks": [
+                    2.2,
+                    3
+                ]
+            },
+            {
+                "name": "Phase 3 - Permission System",
+                "target_date": "2025-07-31",
+                "tasks": [
+                    4
+                ]
+            }
+        ]
+    }
+}

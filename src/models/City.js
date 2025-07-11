@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const { sequelize } = require('../config/database');
 const Country = require('./Country'); // Import Country model
 const State = require('./State'); // Import Country model
 const City = sequelize.define("City", {

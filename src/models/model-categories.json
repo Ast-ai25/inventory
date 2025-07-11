@@ -1,0 +1,26 @@
+{
+  "globalModels": [
+    "User",
+    "Role", 
+    "Permission",
+    "Company",
+    "Package",
+    "Module",
+    "PackageModulePermission"
+  ],
+  "tenantModels": [
+    "Product",
+    "User",
+    "Inventory",
+    "Invoice",
+    "Payment",
+    "Sale",
+    "Category",
+    "Brand",
+    "Supplier",
+    "Tax",
+    "Charge",
+    "Delivery",
+    "Service"
+  ]
+}

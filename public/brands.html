@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management - Brands</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="/src/theme/style.css" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <div id="page-content">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="mb-0">Brand Management</h2>
+                        <button id="add-brand-btn" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i> Add Brand
+                        </button>
+                    </div>
+                    <div id="brands-table">
+                        <!-- TableComponent will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+    <script src="/src/utils/auth.js"></script>
+    <script src="/src/components/Sidebar/sidebar.js"></script>
+    <script src="/src/components/Header/header.js"></script>
+    <script src="/src/components/Footer/footer.js"></script>
+    <script src="/src/components/Table/TableComponent.js"></script>
+    <script src="/src/components/Modal/ModalComponent.js"></script>
+    <script src="/src/main.js"></script>
+    <script>
+    document.addEventListener('app:layout-ready', async () => {
+            if (!await Auth.checkAuth()) {
+                return;
+            }
+
+            let table;
+            let modal;
+            let brands = [];
+            let categories = [];
+            let countries = [];
+
+            const columns = [
+                { header: 'Brand Name', accessor: 'name' },
+                { header: 'Category', accessor: 'Category.name' },
+                { header: 'Country', accessor: 'Country.name' }
+            ];
+
+            const userPermissions = {
+                canCreate: Auth.hasPermission('create_brand'),
+                canUpdate: Auth.hasPermission('update_brand'),
+                canDelete: Auth.hasPermission('delete_brand')
+            };
+
+            if (!userPermissions.canCreate) {
+                const addBrandBtn = document.getElementById('add-brand-btn');
+                if (addBrandBtn) addBrandBtn.style.display = 'none';
+            }
+
+            const fetchCategories = async () => {
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch('/api/categories', {
+                        headers: { 'Authorization': token }
+                    });
+                    if (!response.ok) throw new Error('Failed to fetch categories');
+                    categories = await response.json();
+                } catch (error) {
+                    console.error('Failed to load categories:', error);
+                    categories = [];
+                }
+            };
+
+            const fetchCountries = async () => {
+                try {
+                    const response = await fetch('/api/countries');
+                    if (!response.ok) throw new Error('Failed to fetch countries');
+                    countries = await response.json();
+                } catch (error) {
+                    console.error('Failed to load countries:', error);
+                    countries = [];
+                }
+            };
+
+            const fetchAllBrands = async () => {
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch('/api/brands', {
+                        headers: { 'Authorization': token }
+                    });
+                    if (!response.ok) throw new Error('Failed to fetch brands');
+                    brands = await response.json();
+                    if (table) {
+                        table.updateData(brands);
+                    } else {
+                        const handleEditFn = userPermissions.canUpdate ? handleEdit : null;
+                        const handleDeleteFn = userPermissions.canDelete ? handleDelete : null;
+                        table = new TableComponent('brands-table', columns, brands, handleEditFn, handleDeleteFn);
+                    }
+                } catch (error) {
+                    console.error('Failed to load brands:', error);
+                }
+            };
+
+            const handleSave = async (id, data) => {
+                const url = id ? `/api/brands/${id}` : '/api/brands';
+                const method = id ? 'PUT' : 'POST';
+
+                try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(url, {
+                    method,
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': token
+                    },
+                    body: JSON.stringify({
+                        name: data['brand-name'],
+                        category_id: data['category_id'],
+                        country_id: data['country_id']
+                    })
+                });
+                    if (!response.ok) throw new Error('Failed to save brand');
+                    modal.hide();
+                    await fetchAllBrands();
+                } catch (error) {
+                    console.error('Failed to save brand:', error);
+                }
+            };
+
+            const handleEdit = (id) => {
+                const brand = brands.find(b => b.id == id);
+                if (brand) {
+                    modal.show({
+                        id: brand.id,
+                        'brand-name': brand.name,
+                        'category_id': brand.category_id,
+                        'country_id': brand.country_id
+                    });
+                }
+            };
+
+            const handleDelete = async (id) => {
+                if (confirm('Are you sure you want to delete this brand?')) {
+                    try {
+                        const response = await fetch(`/api/brands/${id}`, { method: 'DELETE' });
+                        if (!response.ok) throw new Error('Failed to delete brand');
+                        await fetchAllBrands();
+                    } catch (error) {
+                        console.error('Failed to delete brand:', error);
+                    }
+                }
+            };
+
+            await Promise.all([fetchCategories(), fetchCountries()]);
+            await fetchAllBrands();
+
+            modal = new ModalComponent('brand-modal', 'Brand', [
+                {
+                    id: 'category_id',
+                    label: 'Category',
+                    type: 'select',
+                    options: categories.map(c => ({ value: c.id, text: c.name })),
+                    liveSearch: true
+                },
+                {
+                    id: 'country_id',
+                    label: 'Country',
+                    type: 'select',
+                    options: countries.map(c => ({ value: c.id, text: c.name })),
+                    liveSearch: true
+                },
+                { id: 'brand-name', label: 'Brand Name', type: 'text' }
+            ], handleSave);
+
+            document.getElementById('add-brand-btn').addEventListener('click', () => {
+                modal.show();
+            });
+        });
+    </script>
+</body>
+</html>

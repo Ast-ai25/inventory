@@ -1,6 +1,6 @@
 // Inventory model
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const { sequelize } = require('../config/database');
 const Product = require('./Product');
 const Branch = require('./Branch');
 const ProductSerial = require('./ProductSerial');

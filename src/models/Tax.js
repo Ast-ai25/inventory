@@ -1,13 +1,18 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const { sequelize } = require('../config/database');
+const Country = require('./Country');
 
 const Tax = sequelize.define('Tax', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-    country_id: { type: DataTypes.INTEGER, allowNull: false },
     name: { type: DataTypes.STRING, allowNull: false },
-    percentage: { type: DataTypes.FLOAT, allowNull: false },
-    is_active: { type: DataTypes.BOOLEAN, defaultValue: true } // Active/Blocked status
+    country_id: { type: DataTypes.INTEGER, allowNull: false },
+    value: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
+    is_active: { type: DataTypes.BOOLEAN, defaultValue: true },
+}, {
+    timestamps: true
 });
-// Define Relationship
-Tax.belongsTo(Country, { foreignKey: 'country_id' });
+
+// Associations
+Tax.belongsTo(Country, { foreignKey: 'country_id', as: 'Country' });
+
 module.exports = Tax;

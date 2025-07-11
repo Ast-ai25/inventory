@@ -1,0 +1,120 @@
+{
+  "title": "Plan for Dynamic Page-Based Permission System",
+  "overview": "This plan outlines the steps to transition from a hardcoded permission system to a dynamic, database-driven one that can be managed through a new admin interface.",
+  "phases": [
+    {
+      "phase": 1,
+      "title": "Backend and Database Setup",
+      "description": "Create the necessary database structures and API endpoints to support dynamic permissions.",
+      "steps": [
+        {
+          "step": 1,
+          "action": "Create a new database table: 'PagePermissions'",
+          "details": "This table will link roles to specific permissions for different pages/modules.",
+          "schema": {
+            "id": "INTEGER, PRIMARY KEY, AUTO_INCREMENT",
+            "role_id": "INTEGER, FOREIGN KEY to Roles(id)",
+            "module_name": "STRING (e.g., 'brands', 'users')",
+            "page_name": "STRING (e.g., 'brands.html')",
+            "can_create": "BOOLEAN, DEFAULT false",
+            "can_read": "BOOLEAN, DEFAULT true",
+            "can_update": "BOOLEAN, DEFAULT false",
+            "can_delete": "BOOLEAN, DEFAULT false"
+          }
+        },
+        {
+          "step": 2,
+          "action": "Create a new Sequelize model: 'PagePermission.js'",
+          "file": "src/models/PagePermission.js",
+          "details": "Define the Sequelize model corresponding to the 'PagePermissions' table."
+        },
+        {
+          "step": 3,
+          "action": "Create new API endpoints for PagePermissions",
+          "details": "Develop a new controller and routes to manage these permissions.",
+          "files_to_create": [
+            "src/controllers/pagePermissionController.js",
+            "src/routes/pagePermissionRoutes.js"
+          ],
+          "endpoints": [
+            {
+              "method": "GET",
+              "path": "/api/page-permissions/role/:roleId",
+              "description": "Get all page permissions for a specific role."
+            },
+            {
+              "method": "POST",
+              "path": "/api/page-permissions",
+              "description": "Create or update the page permissions for a role."
+            }
+          ]
+        },
+        {
+          "step": 4,
+          "action": "Update the authentication response",
+          "file": "src/controllers/authController.js",
+          "details": "Modify the '/api/auth/verify' and login endpoints to include the user's page permissions in the session data sent to the frontend."
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "title": "Frontend UI for Permission Management",
+      "description": "Build the admin interface for managing dynamic permissions.",
+      "steps": [
+        {
+          "step": 1,
+          "action": "Create a new page: 'page-permissions.html'",
+          "file": "public/page-permissions.html",
+          "details": "Create a new HTML file for the permission management UI. This page will be added to the sidebar."
+        },
+        {
+          "step": 2,
+          "action": "Implement the UI components",
+          "details": "On 'page-permissions.html', add the following components:",
+          "components": [
+            "A dropdown to select a user 'Role'.",
+            "A table or list displaying all available modules/pages (e.g., 'Brands', 'Users', 'Categories').",
+            "Checkboxes next to each page for 'Create', 'Read', 'Update', 'Delete' permissions.",
+            "A 'Save' button."
+          ]
+        },
+        {
+          "step": 3,
+          "action": "Implement the frontend logic",
+          "details": "Write the JavaScript for 'page-permissions.html' to:",
+          "logic": [
+            "Fetch all roles and populate the role dropdown.",
+            "When a role is selected, fetch its current page permissions and update the checkboxes.",
+            "On 'Save', collect the state of all checkboxes and send it to the 'POST /api/page-permissions' endpoint."
+          ]
+        }
+      ]
+    },
+    {
+      "phase": 3,
+      "title": "Frontend Implementation of Dynamic Permissions",
+      "description": "Refactor the application to use the new dynamic permission system.",
+      "steps": [
+        {
+          "step": 1,
+          "action": "Update 'auth.js' utility",
+          "file": "public/src/utils/auth.js",
+          "details": "Modify 'Auth.checkAuth' to store the new page permissions in localStorage. Create a new function 'Auth.hasPagePermission(moduleName, permission)' to check for these permissions."
+        },
+        {
+          "step": 2,
+          "action": "Refactor existing pages (e.g., 'brands.html')",
+          "file": "public/brands.html",
+          "details": "Replace the hardcoded permission checks (e.g., Auth.hasPermission('create_brand')) with the new dynamic check (e.g., Auth.hasPagePermission('brands', 'can_create'))."
+        },
+        {
+          "step": 3,
+          "action": "Create a dynamic sidebar",
+          "file": "public/src/components/Sidebar/sidebar.js",
+          "details": "Modify the sidebar generation logic to check for 'can_read' permission for each module. If the user does not have read permission for a module, do not display it in the sidebar menu."
+        }
+      ]
+    }
+  ]
+}

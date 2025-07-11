@@ -1,0 +1,53 @@
+{
+  "brand_permissions": [
+    {
+      "step": 1,
+      "action": "Navigate to file",
+      "file": "public/brands.html"
+    },
+    {
+      "step": 2,
+      "action": "Search for the <script> tag and locate the columns variable declaration."
+    },
+    {
+      "step": 3,
+      "action": "Add permission checks",
+      "description": "After the 'columns' variable, add a 'userPermissions' object to check for 'create_brand', 'update_brand', and 'delete_brand' permissions.",
+      "code_snippet": "const userPermissions = {\n    canCreate: Auth.hasPermission('create_brand'),\n    canUpdate: Auth.hasPermission('update_brand'),\n    canDelete: Auth.hasPermission('delete_brand')\n};"
+    },
+    {
+      "step": 4,
+      "action": "Conditionally hide 'Add Brand' button",
+      "description": "Add a check to hide the 'add-brand-btn' if the user does not have the 'create_brand' permission.",
+      "code_snippet": "if (!userPermissions.canCreate) {\n    const addBrandBtn = document.getElementById('add-brand-btn');\n    if (addBrandBtn) addBrandBtn.style.display = 'none';\n}"
+    },
+    {
+      "step": 5,
+      "action": "Modify TableComponent instantiation",
+      "description": "Update the 'TableComponent' to conditionally pass the edit and delete handlers based on permissions.",
+      "original_code": "table = new TableComponent('brands-table', columns, brands, handleEdit, handleDelete);",
+      "modified_code": "const handleEditFn = userPermissions.canUpdate ? handleEdit : null;\nconst handleDeleteFn = userPermissions.canDelete ? handleDelete : null;\ntable = new TableComponent('brands-table', columns, brands, handleEditFn, handleDeleteFn);"
+    }
+  ],
+  "user_creation_fix": [
+    {
+      "step": 1,
+      "action": "Navigate to file",
+      "file": "public/users.html"
+    },
+    {
+      "step": 2,
+      "action": "Locate the ModalComponent instantiation for the user modal."
+    },
+    {
+      "step": 3,
+      "action": "Find the 'branch_id' field definition within the modal's fields array."
+    },
+    {
+      "step": 4,
+      "action": "Remove the 'required: true' property from the 'branch_id' field definition.",
+      "original_code": "{ id: 'branch_id', label: 'Branch', type: 'select', options: [], required: true }",
+      "modified_code": "{ id: 'branch_id', label: 'Branch', type: 'select', options: [] }"
+    }
+  ]
+}

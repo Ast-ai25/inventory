@@ -1,6 +1,6 @@
 // Sales model
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const { sequelize } = require('../config/database');
 const User = require('./User');
 const Product = require('./Product');
 const Branch = require('./Branch');
@@ -9,6 +9,7 @@ const Sale = sequelize.define('Sale', {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     customer_id: { type: DataTypes.INTEGER, allowNull: false },
     branch_id: { type: DataTypes.INTEGER, allowNull: false },
+    product_id: { type: DataTypes.INTEGER, allowNull: true }, // <-- Add this line
     total_amount: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
     tax_amount: { type: DataTypes.DECIMAL(10, 2), defaultValue: 0 },
     discount_amount: { type: DataTypes.DECIMAL(10, 2), defaultValue: 0 },
